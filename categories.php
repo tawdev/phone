@@ -15,7 +15,7 @@ foreach ($categories as $cat) {
     $products = $product->getAll($cat['id']);
     $categoriesWithProducts[] = [
         'category' => $cat,
-        'products' => array_slice($products, 0, 4), // Limiter à 4 produits par catégorie
+        'products' => array_slice($products, 0, 5), // Limiter à 5 produits par catégorie
         'total_products' => count($products)
     ];
 }
@@ -83,7 +83,7 @@ include 'includes/header.php';
                                 <?php endforeach; ?>
                             </div>
                             
-                            <?php if ($totalProducts > 4): ?>
+                            <?php if ($totalProducts > 5): ?>
                                 <div class="category-view-more">
                                     <a href="produits.php?category=<?php echo $cat['slug']; ?>" class="btn btn-outline">
                                         Voir tous les produits (<?php echo $totalProducts; ?>)

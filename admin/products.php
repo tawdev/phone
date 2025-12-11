@@ -68,9 +68,7 @@ if (isset($_GET['success'])) {
                         <td><?php echo escape($prod['category_name']); ?></td>
                         <td><?php echo formatPrice($prod['price']); ?></td>
                         <td>
-                            <span class="badge <?php echo $prod['stock'] < 10 ? 'badge-warning' : 'badge-success'; ?>">
-                                <?php echo $prod['stock']; ?>
-                            </span>
+                            <?php echo $prod['stock']; ?>
                         </td>
                         <td>
                             <?php if ($prod['featured']): ?>

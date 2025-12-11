@@ -38,7 +38,7 @@ function getAdminUser() {
 
 // Fonction pour formater le prix
 function formatPrice($price) {
-    return number_format($price, 2, ',', ' ') . ' €';
+    return number_format($price, 2, ',', ' ') . ' DH';
 }
 
 // Fonction pour générer un slug
