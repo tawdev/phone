@@ -1,0 +1,395 @@
+/* Home Page Styles - index.php */
+
+/* Hero Section */
+.hero {
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    color: white;
+    padding: 6rem 0;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    min-height: 90vh;
+    display: flex;
+    align-items: center;
+}
+
+.hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.7) 0%, rgba(30, 64, 175, 0.8) 100%);
+    z-index: 0;
+}
+
+.hero::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="grid" width="100" height="100" patternUnits="userSpaceOnUse"><path d="M 100 0 L 0 0 0 100" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+    opacity: 0.3;
+    z-index: 0;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    animation: fadeInUp 0.8s ease-out;
+    width: 100%;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.hero-content h1,
+.hero-title-animate {
+    font-size: 3.5rem;
+    margin-bottom: 1.5rem;
+    font-weight: 800;
+    line-height: 1.2;
+    color: white;
+    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.5), 0 2px 10px rgba(0, 0, 0, 0.3);
+    display: inline-block;
+    position: relative;
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+    animation: heroTitleFadeIn 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s forwards;
+    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform, opacity;
+}
+
+@keyframes heroTitleFadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(30px) scale(0.95);
+        filter: blur(5px);
+    }
+    50% {
+        opacity: 0.9;
+        transform: translateY(-8px) scale(1.03);
+        filter: blur(2px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        filter: blur(0);
+    }
+}
+
+.hero-content h1::after,
+.hero-title-animate::after {
+    content: '';
+    position: absolute;
+    bottom: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 4px;
+    background: linear-gradient(90deg, 
+        transparent 0%, 
+        rgba(255, 255, 255, 0.9) 20%, 
+        rgba(255, 255, 255, 0.9) 80%, 
+        transparent 100%);
+    border-radius: 2px;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    animation: underlineExpand 1.2s cubic-bezier(0.4, 0, 0.2, 1) 1.5s forwards;
+}
+
+@keyframes underlineExpand {
+    0% {
+        width: 0;
+        opacity: 0;
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        width: 80%;
+        opacity: 1;
+    }
+}
+
+.hero-content p {
+    font-size: 1.375rem;
+    margin-bottom: 2.5rem;
+    opacity: 0.98;
+    font-weight: 400;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+    color: white;
+}
+
+/* Categories Section */
+.categories-section {
+    background: var(--light-color);
+}
+
+.categories-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.category-card-home {
+    background: white;
+    border-radius: 1rem;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 2px solid transparent;
+    position: relative;
+}
+
+.category-card-home:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+    border-color: var(--primary-color);
+}
+
+.category-card-link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    padding: 2rem;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.category-card-icon {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.category-card-icon::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);
+    transform: scale(0);
+    transition: transform 0.5s ease;
+}
+
+.category-card-home:hover .category-card-icon::before {
+    transform: scale(1);
+}
+
+.category-card-home:hover .category-card-icon {
+    transform: scale(1.1) rotate(5deg);
+    box-shadow: 0 8px 25px rgba(37, 99, 235, 0.4);
+}
+
+.category-card-icon i {
+    font-size: 2.5rem;
+    color: white;
+    position: relative;
+    z-index: 1;
+}
+
+.category-card-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.category-card-content h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--dark-color);
+    margin-bottom: 0.75rem;
+    transition: color 0.3s ease;
+}
+
+.category-card-home:hover .category-card-content h3 {
+    color: var(--primary-color);
+}
+
+.category-card-description {
+    color: var(--text-light);
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+    flex: 1;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.category-card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 1.5rem;
+    border-top: 2px solid var(--border-color);
+    margin-top: auto;
+}
+
+.category-product-count {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-color);
+    font-weight: 600;
+    font-size: 0.9375rem;
+}
+
+.category-product-count i {
+    color: var(--primary-color);
+}
+
+.category-arrow {
+    width: 40px;
+    height: 40px;
+    background: var(--light-color);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary-color);
+    transition: all 0.3s ease;
+}
+
+.category-card-home:hover .category-arrow {
+    background: var(--primary-color);
+    color: white;
+    transform: translateX(5px);
+}
+
+.category-card-home:hover .category-arrow i {
+    transform: translateX(3px);
+}
+
+.category-arrow i {
+    transition: transform 0.3s ease;
+}
+
+/* Featured Products & Promotions */
+.featured-products,
+.promotions {
+    background: white;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .hero {
+        padding: 4rem 0;
+        min-height: 60vh;
+        background-attachment: scroll;
+    }
+    
+    .hero-content h1 {
+        font-size: 2rem;
+        line-height: 1.2;
+    }
+    
+    .hero-content p {
+        font-size: 1.125rem;
+        margin-bottom: 2rem;
+    }
+    
+    .categories-cards-grid {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+    }
+    
+    .category-card-home {
+        border-radius: 0.75rem;
+    }
+    
+    .category-card-link {
+        padding: 1.5rem;
+    }
+    
+    .category-card-icon {
+        width: 70px;
+        height: 70px;
+        margin-bottom: 1.25rem;
+    }
+    
+    .category-card-icon i {
+        font-size: 2rem;
+    }
+    
+    .category-card-content h3 {
+        font-size: 1.25rem;
+    }
+    
+    .category-card-description {
+        font-size: 0.875rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero {
+        padding: 3rem 0;
+        min-height: 50vh;
+    }
+    
+    .hero-content h1 {
+        font-size: 1.75rem;
+    }
+    
+    .hero-content p {
+        font-size: 1rem;
+    }
+    
+    .categories-cards-grid {
+        grid-template-columns: 1fr;
+        gap: 1.25rem;
+    }
+    
+    .category-card-link {
+        padding: 1.25rem;
+    }
+    
+    .category-card-icon {
+        width: 60px;
+        height: 60px;
+        margin-bottom: 1rem;
+    }
+    
+    .category-card-icon i {
+        font-size: 1.75rem;
+    }
+    
+    .category-card-content h3 {
+        font-size: 1.125rem;
+    }
+}
+

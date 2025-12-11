@@ -1,0 +1,49 @@
+═══════════════════════════════════════════════════════════════
+  PHONESTORE - INSTRUCTIONS D'INSTALLATION RAPIDE
+═══════════════════════════════════════════════════════════════
+
+1. BASE DE DONNÉES
+   ────────────────────────────────────────────────────────────
+   - Ouvrez phpMyAdmin (http://localhost/phpmyadmin)
+   - Créez une nouvelle base de données nommée "phone_store"
+   - Sélectionnez la base de données
+   - Cliquez sur "Importer"
+   - Choisissez le fichier "database.sql"
+   - Cliquez sur "Exécuter"
+
+2. CONFIGURATION
+   ────────────────────────────────────────────────────────────
+   - Le fichier config/database.php est déjà configuré pour XAMPP
+   - Si vous utilisez un autre serveur, modifiez les paramètres :
+     * DB_HOST: localhost
+     * DB_NAME: phone_store
+     * DB_USER: root (ou votre utilisateur MySQL)
+     * DB_PASS: (vide pour XAMPP par défaut)
+
+3. DOSSIER UPLOADS
+   ────────────────────────────────────────────────────────────
+   - Le dossier uploads/ a été créé automatiquement
+   - Assurez-vous qu'il a les permissions d'écriture (chmod 755)
+
+4. ACCÈS AU SITE
+   ────────────────────────────────────────────────────────────
+   Front-end:     http://localhost/Phone/
+   Admin:         http://localhost/Phone/admin/login.php
+   
+   Identifiants admin par défaut:
+   - Username: admin
+   - Password: admin123
+   
+   ⚠️ CHANGEZ LE MOT DE PASSE EN PRODUCTION !
+
+5. PREMIÈRES ÉTAPES
+   ────────────────────────────────────────────────────────────
+   - Connectez-vous à l'administration
+   - Ajoutez des produits avec des images
+   - Testez le panier et la commande
+   - Personnalisez les catégories selon vos besoins
+
+═══════════════════════════════════════════════════════════════
+  BONNE UTILISATION !
+═══════════════════════════════════════════════════════════════
+
