@@ -37,10 +37,10 @@ $pageTitle = "Gestion des catégories";
             <tbody>
                 <?php foreach ($categories as $cat): ?>
                     <tr>
-                        <td><?php echo escape($cat['name']); ?></td>
-                        <td><?php echo escape($cat['slug']); ?></td>
-                        <td><?php echo escape($cat['description']); ?></td>
-                        <td>
+                        <td data-label="Nom"><?php echo escape($cat['name']); ?></td>
+                        <td data-label="Slug"><?php echo escape($cat['slug']); ?></td>
+                        <td data-label="Description"><?php echo escape($cat['description']); ?></td>
+                        <td data-label="Actions">
                             <a href="category-edit.php?id=<?php echo $cat['id']; ?>" class="btn btn-sm btn-primary">
                                 <i class="fas fa-edit"></i>
                             </a>

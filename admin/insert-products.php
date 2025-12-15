@@ -273,7 +273,7 @@ $categoryCounts = $stmt->fetchAll(PDO::FETCH_ASSOC);
             border: 1px solid #f5c6cb;
         }
         .btn {
-            background: #2563eb;
+            background: #ffa307;
             color: white;
             padding: 12px 24px;
             border: none;
@@ -283,7 +283,7 @@ $categoryCounts = $stmt->fetchAll(PDO::FETCH_ASSOC);
             margin-top: 20px;
         }
         .btn:hover {
-            background: #1d4ed8;
+            background: #ffa307;
         }
         table {
             width: 100%;
@@ -301,7 +301,7 @@ $categoryCounts = $stmt->fetchAll(PDO::FETCH_ASSOC);
         }
         .count {
             font-weight: bold;
-            color: #2563eb;
+            color: #ffa307;
         }
     </style>
 </head>

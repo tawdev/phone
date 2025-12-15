@@ -2,14 +2,20 @@
 require_once __DIR__ . '/../config/config.php';
 require_once __DIR__ . '/../classes/Product.php';
 require_once __DIR__ . '/../classes/Category.php';
+require_once __DIR__ . '/../classes/TypeCategory.php';
 require_once __DIR__ . '/includes/header.php';
 
 $product = new Product();
 $category = new Category();
+$typeCategory = new TypeCategory();
 
 $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 $prod = $id ? $product->getById($id) : null;
 $categories = $category->getAll();
+$typeCategories = [];
+if ($prod && $prod['category_id']) {
+    $typeCategories = $typeCategory->getByCategoryId($prod['category_id']);
+}
 
 $error = '';
 $success = '';
@@ -22,6 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'price' => floatval($_POST['price'] ?? 0),
         'old_price' => !empty($_POST['old_price']) ? floatval($_POST['old_price']) : null,
         'category_id' => intval($_POST['category_id'] ?? 0),
+        'type_category_id' => !empty($_POST['type_category_id']) ? intval($_POST['type_category_id']) : null,
         'brand' => trim($_POST['brand'] ?? ''),
         'stock' => intval($_POST['stock'] ?? 0),
         'featured' => isset($_POST['featured']) ? 1 : 0
@@ -122,6 +129,22 @@ $pageTitle = $id ? "Modifier le produit" : "Nouveau produit";
         </div>
         
         <div class="form-group">
+            <label for="type_category_id">Type de catégorie</label>
+            <select id="type_category_id" name="type_category_id">
+                <option value="">Sélectionner un type</option>
+                <?php foreach ($typeCategories as $typeCat): ?>
+                    <option value="<?php echo $typeCat['id']; ?>" 
+                            <?php echo ($prod && $prod['type_category_id'] == $typeCat['id']) ? 'selected' : ''; ?>>
+                        <?php echo escape($typeCat['name']); ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+            <small>Les types seront chargés après la sélection de la catégorie</small>
+        </div>
+    </div>
+    
+    <div class="form-row">
+        <div class="form-group">
             <label for="brand">Marque</label>
             <input type="text" id="brand" name="brand" 
                    value="<?php echo $prod ? escape($prod['brand']) : ''; ?>">
@@ -179,3 +202,53 @@ $pageTitle = $id ? "Modifier le produit" : "Nouveau produit";
 
 <?php include 'includes/footer.php'; ?>
 
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const categorySelect = document.getElementById('category_id');
+    const typeCategorySelect = document.getElementById('type_category_id');
+    const currentTypeCategoryId = <?php echo ($prod && $prod['type_category_id']) ? $prod['type_category_id'] : 'null'; ?>;
+    
+    categorySelect.addEventListener('change', function() {
+        const categoryId = this.value;
+        
+        // Réinitialiser le select des types
+        typeCategorySelect.innerHTML = '<option value="">Sélectionner un type</option>';
+        
+        if (categoryId) {
+            // Charger les types de catégorie via AJAX
+            fetch('<?php echo BASE_URL; ?>admin/api/get-type-categories.php?category_id=' + categoryId)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.length > 0) {
+                        data.forEach(function(type) {
+                            const option = document.createElement('option');
+                            option.value = type.id;
+                            option.textContent = type.name;
+                            if (currentTypeCategoryId && currentTypeCategoryId == type.id) {
+                                option.selected = true;
+                            }
+                            typeCategorySelect.appendChild(option);
+                        });
+                    } else {
+                        const option = document.createElement('option');
+                        option.value = '';
+                        option.textContent = 'Aucun type disponible';
+                        typeCategorySelect.appendChild(option);
+                    }
+                })
+                .catch(error => {
+                    console.error('Erreur:', error);
+                    const option = document.createElement('option');
+                    option.value = '';
+                    option.textContent = 'Erreur de chargement';
+                    typeCategorySelect.appendChild(option);
+                });
+        }
+    });
+    
+    // Déclencher le changement si une catégorie est déjà sélectionnée
+    if (categorySelect.value) {
+        categorySelect.dispatchEvent(new Event('change'));
+    }
+});
+</script>

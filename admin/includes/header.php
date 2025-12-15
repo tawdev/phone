@@ -19,7 +19,8 @@ $currentPage = basename($_SERVER['PHP_SELF']);
 </head>
 <body class="admin-body">
     <div class="admin-layout">
-        <aside class="admin-sidebar">
+        <div class="admin-sidebar-overlay" id="adminSidebarOverlay"></div>
+        <aside class="admin-sidebar" id="adminSidebar">
             <div class="sidebar-header">
                 <i class="fas fa-mobile-alt"></i>
                 <span>PhoneStore Admin</span>
@@ -33,6 +34,9 @@ $currentPage = basename($_SERVER['PHP_SELF']);
                 </a>
                 <a href="<?php echo BASE_URL; ?>admin/categories.php" class="<?php echo $currentPage === 'categories.php' ? 'active' : ''; ?>">
                     <i class="fas fa-tags"></i> Catégories
+                </a>
+                <a href="<?php echo BASE_URL; ?>admin/types-categories.php" class="<?php echo ($currentPage === 'types-categories.php' || $currentPage === 'type-category-edit.php') ? 'active' : ''; ?>">
+                    <i class="fas fa-layer-group"></i> Types de catégories
                 </a>
                 <a href="<?php echo BASE_URL; ?>admin/orders.php" class="<?php echo $currentPage === 'orders.php' ? 'active' : ''; ?>">
                     <i class="fas fa-shopping-cart"></i> Commandes
@@ -53,7 +57,12 @@ $currentPage = basename($_SERVER['PHP_SELF']);
         
         <main class="admin-main">
             <header class="admin-header">
-                <h1><?php echo isset($pageTitle) ? escape($pageTitle) : 'Administration'; ?></h1>
+                <div class="admin-header-left">
+                    <button class="admin-menu-toggle" id="adminMenuToggle" aria-label="Toggle menu">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <h1><?php echo isset($pageTitle) ? escape($pageTitle) : 'Administration'; ?></h1>
+                </div>
                 <div class="admin-user">
                     <i class="fas fa-user-circle"></i>
                     <span><?php 

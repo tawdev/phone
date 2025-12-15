@@ -79,11 +79,11 @@ $pageTitle = "Tableau de bord";
                     <tbody>
                         <?php foreach ($recentOrders as $ord): ?>
                             <tr>
-                                <td><a href="order-detail.php?id=<?php echo $ord['id']; ?>"><?php echo escape($ord['order_number']); ?></a></td>
-                                <td><?php echo escape($ord['customer_name']); ?></td>
-                                <td><?php echo formatPrice($ord['total_amount']); ?></td>
-                                <td><span class="badge badge-<?php echo $ord['status']; ?>"><?php echo ucfirst($ord['status']); ?></span></td>
-                                <td><?php echo date('d/m/Y H:i', strtotime($ord['created_at'])); ?></td>
+                                <td data-label="N° Commande"><a href="order-detail.php?id=<?php echo $ord['id']; ?>"><?php echo escape($ord['order_number']); ?></a></td>
+                                <td data-label="Client"><?php echo escape($ord['customer_name']); ?></td>
+                                <td data-label="Montant"><?php echo formatPrice($ord['total_amount']); ?></td>
+                                <td data-label="Statut"><span class="badge badge-<?php echo $ord['status']; ?>"><?php echo ucfirst($ord['status']); ?></span></td>
+                                <td data-label="Date"><?php echo date('d/m/Y H:i', strtotime($ord['created_at'])); ?></td>
                             </tr>
                         <?php endforeach; ?>
                     </tbody>
@@ -108,9 +108,9 @@ $pageTitle = "Tableau de bord";
                     <tbody>
                         <?php foreach (array_slice($lowStockProducts, 0, 5) as $prod): ?>
                             <tr>
-                                <td><?php echo escape($prod['name']); ?></td>
-                                <td><span class="badge badge-warning"><?php echo $prod['stock']; ?></span></td>
-                                <td><a href="product-edit.php?id=<?php echo $prod['id']; ?>" class="btn btn-sm">Modifier</a></td>
+                                <td data-label="Produit"><?php echo escape($prod['name']); ?></td>
+                                <td data-label="Stock"><span class="badge badge-warning"><?php echo $prod['stock']; ?></span></td>
+                                <td data-label="Action"><a href="product-edit.php?id=<?php echo $prod['id']; ?>" class="btn btn-sm">Modifier</a></td>
                             </tr>
                         <?php endforeach; ?>
                     </tbody>

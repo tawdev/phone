@@ -1,6 +1,79 @@
 // Admin JavaScript
 
 document.addEventListener('DOMContentLoaded', function() {
+    // Admin mobile menu toggle
+    const adminMenuToggle = document.getElementById('adminMenuToggle');
+    const adminSidebar = document.getElementById('adminSidebar');
+    const adminSidebarOverlay = document.getElementById('adminSidebarOverlay');
+    
+    if (adminMenuToggle && adminSidebar) {
+        // Prevent event bubbling and ensure click works
+        adminMenuToggle.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            const isActive = adminSidebar.classList.contains('active');
+            
+            if (isActive) {
+                adminSidebar.classList.remove('active');
+                adminMenuToggle.classList.remove('active');
+                if (adminSidebarOverlay) {
+                    adminSidebarOverlay.classList.remove('active');
+                }
+            } else {
+                adminSidebar.classList.add('active');
+                adminMenuToggle.classList.add('active');
+                if (adminSidebarOverlay) {
+                    adminSidebarOverlay.classList.add('active');
+                }
+            }
+        }, false);
+        
+        // Close menu when clicking on overlay
+        if (adminSidebarOverlay) {
+            adminSidebarOverlay.addEventListener('click', function() {
+                adminSidebar.classList.remove('active');
+                adminMenuToggle.classList.remove('active');
+                adminSidebarOverlay.classList.remove('active');
+            });
+        }
+        
+        // Close menu when clicking on a sidebar link
+        const sidebarLinks = adminSidebar.querySelectorAll('a');
+        sidebarLinks.forEach(link => {
+            link.addEventListener('click', function() {
+                adminSidebar.classList.remove('active');
+                adminMenuToggle.classList.remove('active');
+                if (adminSidebarOverlay) {
+                    adminSidebarOverlay.classList.remove('active');
+                }
+            });
+        });
+        
+        // Close menu when clicking outside (on mobile)
+        document.addEventListener('click', function(e) {
+            if (window.innerWidth <= 768) {
+                if (!adminSidebar.contains(e.target) && !adminMenuToggle.contains(e.target)) {
+                    adminSidebar.classList.remove('active');
+                    adminMenuToggle.classList.remove('active');
+                    if (adminSidebarOverlay) {
+                        adminSidebarOverlay.classList.remove('active');
+                    }
+                }
+            }
+        });
+        
+        // Handle window resize
+        window.addEventListener('resize', function() {
+            if (window.innerWidth > 768) {
+                adminSidebar.classList.remove('active');
+                adminMenuToggle.classList.remove('active');
+                if (adminSidebarOverlay) {
+                    adminSidebarOverlay.classList.remove('active');
+                }
+            }
+        });
+    }
+    
     // Confirm delete actions
     const deleteLinks = document.querySelectorAll('a[href*="delete"]');
     deleteLinks.forEach(link => {

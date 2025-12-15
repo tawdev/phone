@@ -45,11 +45,11 @@ $pageTitle = "Gestion des commandes";
             <tbody>
                 <?php foreach ($orders as $ord): ?>
                     <tr>
-                        <td><a href="order-detail.php?id=<?php echo $ord['id']; ?>"><?php echo escape($ord['order_number']); ?></a></td>
-                        <td><?php echo escape($ord['customer_name']); ?></td>
-                        <td><?php echo escape($ord['customer_email']); ?></td>
-                        <td><?php echo formatPrice($ord['total_amount']); ?></td>
-                        <td>
+                        <td data-label="N° Commande"><a href="order-detail.php?id=<?php echo $ord['id']; ?>"><?php echo escape($ord['order_number']); ?></a></td>
+                        <td data-label="Client"><?php echo escape($ord['customer_name']); ?></td>
+                        <td data-label="Email"><?php echo escape($ord['customer_email']); ?></td>
+                        <td data-label="Montant"><?php echo formatPrice($ord['total_amount']); ?></td>
+                        <td data-label="Statut">
                             <form method="POST" class="status-form">
                                 <input type="hidden" name="order_id" value="<?php echo $ord['id']; ?>">
                                 <select name="status" onchange="this.form.submit()">
@@ -62,8 +62,8 @@ $pageTitle = "Gestion des commandes";
                                 <input type="hidden" name="update_status" value="1">
                             </form>
                         </td>
-                        <td><?php echo date('d/m/Y H:i', strtotime($ord['created_at'])); ?></td>
-                        <td>
+                        <td data-label="Date"><?php echo date('d/m/Y H:i', strtotime($ord['created_at'])); ?></td>
+                        <td data-label="Actions">
                             <a href="order-detail.php?id=<?php echo $ord['id']; ?>" class="btn btn-sm btn-primary">
                                 <i class="fas fa-eye"></i>
                             </a>

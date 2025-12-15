@@ -2,10 +2,12 @@
 require_once __DIR__ . '/config/config.php';
 require_once __DIR__ . '/classes/Product.php';
 require_once __DIR__ . '/classes/Category.php';
+require_once __DIR__ . '/classes/TypeCategory.php';
 require_once __DIR__ . '/classes/Cart.php';
 
 $product = new Product();
 $category = new Category();
+$typeCategory = new TypeCategory();
 
 // Récupérer la catégorie sélectionnée
 $selectedCategory = null;
@@ -14,10 +16,25 @@ if ($categorySlug) {
     $selectedCategory = $category->getBySlug($categorySlug);
 }
 
+// Récupérer le type de catégorie sélectionné
+$selectedTypeCategory = null;
+$typeCategoryId = isset($_GET['type']) ? intval($_GET['type']) : null;
+if ($typeCategoryId) {
+    $selectedTypeCategory = $typeCategory->getById($typeCategoryId);
+}
+
 // Récupérer les produits
-$products = $selectedCategory 
-    ? $product->getAll($selectedCategory['id'])
-    : $product->getAll();
+$products = [];
+if ($selectedTypeCategory && $selectedTypeCategory['category_id']) {
+    // Filtrer par type de catégorie
+    $products = $product->getAll($selectedTypeCategory['category_id'], null, $typeCategoryId);
+} elseif ($selectedCategory) {
+    // Filtrer par catégorie
+    $products = $product->getAll($selectedCategory['id']);
+} else {
+    // Tous les produits
+    $products = $product->getAll();
+}
 
 // Recherche
 $searchQuery = $_GET['search'] ?? '';
@@ -25,8 +42,17 @@ if ($searchQuery) {
     $products = $product->search($searchQuery);
 }
 
-// Récupérer toutes les catégories
+// Récupérer toutes les catégories avec leurs types
 $categories = $category->getAll();
+$categoriesWithTypes = [];
+
+foreach ($categories as $cat) {
+    $types = $typeCategory->getByCategoryId($cat['id']);
+    $categoriesWithTypes[] = [
+        'category' => $cat,
+        'types' => $types
+    ];
+}
 
 $pageTitle = "Produits";
 $pageStyle = "products";
@@ -40,15 +66,57 @@ include 'includes/header.php';
         <div class="products-layout">
             <aside class="products-sidebar">
                 <div class="sidebar-section">
-                    <h3>Catégories</h3>
+                    <h3><i class="fas fa-tags"></i> Catégories</h3>
                     <ul class="category-list">
-                        <li><a href="produits.php" class="<?php echo !$selectedCategory ? 'active' : ''; ?>">Tous les produits</a></li>
-                        <?php foreach ($categories as $cat): ?>
-                            <li>
-                                <a href="produits.php?category=<?php echo $cat['slug']; ?>" 
-                                   class="<?php echo ($selectedCategory && $selectedCategory['id'] == $cat['id']) ? 'active' : ''; ?>">
-                                    <?php echo escape($cat['name']); ?>
-                                </a>
+                        <li>
+                            <a href="produits.php" class="<?php echo !$selectedCategory ? 'active' : ''; ?>">
+                                <i class="fas fa-chevron-right"></i> Tous les produits
+                            </a>
+                        </li>
+                        <?php foreach ($categoriesWithTypes as $item): 
+                            $cat = $item['category'];
+                            $types = $item['types'];
+                            $isCategorySelected = ($selectedCategory && $selectedCategory['id'] == $cat['id']);
+                            $hasTypes = !empty($types);
+                        ?>
+                            <li class="category-item-wrapper">
+                                <div class="category-item-header">
+                                    <a href="produits.php?category=<?php echo $cat['slug']; ?>" 
+                                       class="category-link <?php echo $isCategorySelected ? 'active' : ''; ?>">
+                                        <i class="fas fa-chevron-right"></i> 
+                                        <span><?php echo escape($cat['name']); ?></span>
+                                        <?php if ($hasTypes): ?>
+                                            <span class="category-colon">:</span>
+                                        <?php endif; ?>
+                                    </a>
+                                    <?php if ($hasTypes): ?>
+                                        <button class="category-types-toggle" 
+                                                data-category-id="<?php echo $cat['id']; ?>"
+                                                aria-label="Toggle types">
+                                            <i class="fas fa-chevron-down"></i>
+                                        </button>
+                                    <?php endif; ?>
+                                </div>
+                                <?php if ($hasTypes): ?>
+                                    <ul class="type-list category-types-list" 
+                                        id="types-<?php echo $cat['id']; ?>"
+                                        style="display: <?php echo $isCategorySelected ? 'block' : 'none'; ?>;">
+                                        <li>
+                                            <a href="produits.php?category=<?php echo $cat['slug']; ?>" 
+                                               class="type-link <?php echo ($isCategorySelected && !$selectedTypeCategory) ? 'active' : ''; ?>">
+                                                <i class="fas fa-chevron-right"></i> Tous les types
+                                            </a>
+                                        </li>
+                                        <?php foreach ($types as $typeCat): ?>
+                                            <li>
+                                                <a href="produits.php?category=<?php echo $cat['slug']; ?>&type=<?php echo $typeCat['id']; ?>" 
+                                                   class="type-link <?php echo ($selectedTypeCategory && $selectedTypeCategory['id'] == $typeCat['id']) ? 'active' : ''; ?>">
+                                                    <i class="fas fa-chevron-right"></i> <?php echo escape($typeCat['name']); ?>
+                                                </a>
+                                            </li>
+                                        <?php endforeach; ?>
+                                    </ul>
+                                <?php endif; ?>
                             </li>
                         <?php endforeach; ?>
                     </ul>
@@ -57,9 +125,24 @@ include 'includes/header.php';
             
             <div class="products-main">
                 <div class="products-toolbar">
+                    <?php if ($selectedCategory): ?>
+                        <div class="breadcrumb">
+                            <a href="produits.php">Produits</a>
+                            <i class="fas fa-chevron-right"></i>
+                            <span><?php echo escape($selectedCategory['name']); ?></span>
+                            <?php if ($selectedTypeCategory): ?>
+                                <i class="fas fa-chevron-right"></i>
+                                <span><?php echo escape($selectedTypeCategory['name']); ?></span>
+                            <?php endif; ?>
+                        </div>
+                    <?php endif; ?>
+                    
                     <form method="GET" class="search-form">
                         <?php if ($categorySlug): ?>
                             <input type="hidden" name="category" value="<?php echo escape($categorySlug); ?>">
+                        <?php endif; ?>
+                        <?php if ($typeCategoryId): ?>
+                            <input type="hidden" name="type" value="<?php echo $typeCategoryId; ?>">
                         <?php endif; ?>
                         <input type="text" name="search" placeholder="Rechercher un produit..." 
                                value="<?php echo escape($searchQuery); ?>">
@@ -108,4 +191,39 @@ include 'includes/header.php';
 </section>
 
 <?php include 'includes/footer.php'; ?>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Toggle pour les types de catégories
+    const categoryTypesToggles = document.querySelectorAll('.category-types-toggle');
+    
+    categoryTypesToggles.forEach(toggle => {
+        toggle.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const categoryId = this.getAttribute('data-category-id');
+            const typesList = document.getElementById('types-' + categoryId);
+            
+            if (typesList) {
+                const isVisible = typesList.style.display !== 'none';
+                typesList.style.display = isVisible ? 'none' : 'block';
+                this.classList.toggle('active');
+            }
+        });
+    });
+    
+    // Ouvrir automatiquement les types de la catégorie sélectionnée
+    <?php if ($selectedCategory): ?>
+        const selectedCategoryId = <?php echo $selectedCategory['id']; ?>;
+        const selectedTypesList = document.getElementById('types-' + selectedCategoryId);
+        const selectedToggle = document.querySelector('.category-types-toggle[data-category-id="' + selectedCategoryId + '"]');
+        
+        if (selectedTypesList) {
+            selectedTypesList.style.display = 'block';
+        }
+        if (selectedToggle) {
+            selectedToggle.classList.add('active');
+        }
+    <?php endif; ?>
+});
+</script>
 

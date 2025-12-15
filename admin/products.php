@@ -58,24 +58,26 @@ if (isset($_GET['success'])) {
             <tbody>
                 <?php foreach ($products as $prod): ?>
                     <tr>
-                        <td>
+                        <td data-label="Image">
                             <img src="<?php echo BASE_URL . 'uploads/' . ($prod['image'] ?: 'placeholder.jpg'); ?>" 
                                  alt="<?php echo escape($prod['name']); ?>"
                                  class="table-image"
                                  onerror="this.src='<?php echo BASE_URL; ?>assets/images/placeholder.jpg'">
                         </td>
-                        <td><?php echo escape($prod['name']); ?></td>
-                        <td><?php echo escape($prod['category_name']); ?></td>
-                        <td><?php echo formatPrice($prod['price']); ?></td>
-                        <td>
+                        <td data-label="Nom"><?php echo escape($prod['name']); ?></td>
+                        <td data-label="Catégorie"><?php echo escape($prod['category_name']); ?></td>
+                        <td data-label="Prix"><?php echo formatPrice($prod['price']); ?></td>
+                        <td data-label="Stock">
                             <?php echo $prod['stock']; ?>
                         </td>
-                        <td>
+                        <td data-label="Vedette">
                             <?php if ($prod['featured']): ?>
                                 <i class="fas fa-star text-warning"></i>
+                            <?php else: ?>
+                                -
                             <?php endif; ?>
                         </td>
-                        <td>
+                        <td data-label="Actions">
                             <a href="product-edit.php?id=<?php echo $prod['id']; ?>" class="btn btn-sm btn-primary">
                                 <i class="fas fa-edit"></i>
                             </a>

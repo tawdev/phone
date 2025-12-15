@@ -30,7 +30,7 @@
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; <?php echo date('Y'); ?> PhoneStore. Tous droits réservés.</p>
+                <p>&copy; <?php echo date('Y'); ?> C-Digital. Tous droits réservés.</p>
             </div>
         </div>
     </footer>

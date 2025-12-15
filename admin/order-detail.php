@@ -58,10 +58,10 @@ $pageTitle = "Détails de la commande";
             <tbody>
                 <?php foreach ($items as $item): ?>
                     <tr>
-                        <td><?php echo escape($item['product_name']); ?></td>
-                        <td><?php echo $item['quantity']; ?></td>
-                        <td><?php echo formatPrice($item['price']); ?></td>
-                        <td><?php echo formatPrice($item['price'] * $item['quantity']); ?></td>
+                        <td data-label="Produit"><?php echo escape($item['product_name']); ?></td>
+                        <td data-label="Quantité"><?php echo $item['quantity']; ?></td>
+                        <td data-label="Prix unitaire"><?php echo formatPrice($item['price']); ?></td>
+                        <td data-label="Total"><?php echo formatPrice($item['price'] * $item['quantity']); ?></td>
                     </tr>
                 <?php endforeach; ?>
             </tbody>
